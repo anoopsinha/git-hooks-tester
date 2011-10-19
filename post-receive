@@ -1,0 +1,51 @@
+#!/bin/sh
+#
+# An example hook script that is called after a successful
+# commit is made.
+#
+# To enable this hook, rename this file to "post-commit".
+
+
+while read oldrev newrev ref
+do
+    BRANCH="${ref##*/}"
+done
+
+echo Branch name: $BRANCH
+
+
+echo "# Attempting to stage to CloudFoundry"
+
+if [ -n "$APPNAME" ]; then
+
+  if [ "$BRANCH" != "master" ]; then
+      APPNAME=$APPNAME-$BRANCH
+  fi
+
+  echo "# Running "
+  echo ">>>" vmc push $APPNAME -n
+
+  
+  GITNAME="$( pwd )"
+  cd ..
+  DIRNAME="$( pwd )"
+
+  rm -rf $BRANCH
+  git clone $GITNAME $BRANCH
+  cd $BRANCH
+
+  vmc push $APPNAME -n
+
+  if [ $? != 0 ] ; then
+     echo "# Using update instead " 
+     echo ">>>" vmc update $APPNAME -n
+     vmc update $APPNAME -n
+  fi
+
+else
+
+  echo "\nError: Please set the APPNAME variable"
+  echo ">>> export APPNAME=<appname>\n"
+
+
+fi
