@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# An example hook script that is called after a successful
+# commit is made.
+#
+# To enable this hook, rename this file to "post-commit".
+
+echo "# Attempting to stage to CloudFoundry"
+
+if [ -n "$APPNAME" ]; then
+
+  echo "# Running "
+  echo ">>>" vmc push $APPNAME -n
+
+  vmc push $APPNAME -n
+
+  if [ $? != 0 ] ; then
+     echo "# Using update instead " 
+     echo ">>>" vmc update $APPNAME -n
+     vmc update $APPNAME -n
+  fi
+
+else
+
+  echo "\nError: Please set the APPNAME variable"
+  echo ">>> export APPNAME=<appname>\n"
+
+
+fi
