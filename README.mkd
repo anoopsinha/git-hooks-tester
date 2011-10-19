@@ -1,0 +1,69 @@
+Git hooks for CloudFoundry 
+-----------------------------
+
+These are lightweight BASH script hooks for automating a git workflow with cloudfoundry.
+
+
+post-commit
+--------------
+
+This hook assumes that you have set up vmc properly, logged in, and set your vmc target properly as well.
+
+You must set the APPNAME to be your desired cloud foundry application name
+
+     export APPNAME=<appname>
+
+This file you can drop into your .git/hooks directory and it will try to call 
+
+     vmc push $APPNAME
+
+Or equivalently 
+
+     vmc update $APPNAME
+
+if the application already exists on cloudfoundry.com
+
+
+
+post-receive
+--------------
+
+This hook is to be deposited into a remote repository.  It currently assumes that your vmc set-up, credentials, and target are set properly on that remote repository, so that you are able to vmc push successfully from the shell on that remote repository
+
+You must set the APPNAME to be your desired cloud foundry application name
+
+     export APPNAME=<appname>
+
+Additionally, this application uses the branch name so that you can rapidly update staging and production versions of your application.  If you are committing from the master branch, it performs
+
+     vmc push $APPNAME
+
+If you are staging from any other branch, it utilizes the branch name and performs
+
+     vmc push $APPNAME-$BRANCHNAME
+
+This allows you to rapidly manage multiple staging or test versions on cloudfoundry.com, services by different URL's, and maintain your master version as the main URL.
+
+
+NOTE: Both of these hooks are in very preliminary form, and so far only tested with locally hosted git repositories, as opposed to having links right now to github, etc.
+
+
+        
+License and Author
+==================
+
+Author:: Anoop Sinha 
+
+Copyright 2011 
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
