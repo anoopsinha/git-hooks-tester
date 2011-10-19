@@ -1,7 +1,7 @@
-Git hooks for CloudFoundry 
------------------------------
+Automating a Git Workflow for CloudFoundry 
+--------------------------------------------
 
-These are lightweight BASH script hooks for automating a git workflow with cloudfoundry.
+These are lightweight BASH script hooks for automating a git workflow with cloudfoundry.  Place them in your .git/hooks directory.
 
 
 post-commit
