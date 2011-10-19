@@ -4,7 +4,7 @@
 # commit is made.
 #
 # To enable this hook, rename this file to "post-commit".
-
+ 
 echo "# Attempting to stage to CloudFoundry"
 
 if [ -n "$APPNAME" ]; then
